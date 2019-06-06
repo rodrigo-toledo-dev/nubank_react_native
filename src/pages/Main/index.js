@@ -11,6 +11,7 @@ import Tabs from '~/components/Tabs';
 import { Container, Content, Card, CardHeader, CardContent, Title, Description, CardFooter, Annotation } from './styles';
 
 export default function Main() {
+  let offSet = 0;
   const translateY = new Animated.Value(0);
   const animatedEvent = Animated.event(
     [
@@ -25,8 +26,33 @@ export default function Main() {
     },
   );
 
-  function onHandlerStateChange(event){
+  function onHandlerStateChange(event) {
+    if(event.nativeEvent.oldState === State.ACTIVE) {
+      let opened = false;
+      const { translationY } = event.nativeEvent;
 
+      offSet += translationY;
+
+      if( translationY >= 100){
+        opened = true;
+      }else{
+        translateY.setOffset(0);
+        translateY.setValue(offSet);
+        offSet = 0;
+      }
+
+
+      Animated.timing(translateY, {
+        toValue: opened ? 380 : 0,
+        duration: 200,
+        useNativeDriver: true,
+      }).start(() => {
+        offSet = opened ? 380 : 0;
+        translateY.setOffset(offSet);
+        translateY.setValue(0);
+      });
+
+    }
   }
 
 
@@ -69,7 +95,7 @@ export default function Main() {
         </PanGestureHandler>
       </Content>
 
-      <Tabs />
+      <Tabs translateY={translateY} />
     </Container>
   );
 }
