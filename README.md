@@ -69,7 +69,7 @@ rocketseat-basic
 └── README.md
 ```
 
-<!-- CONTACT -->
+<!-- CONTACT ME -->
 
 ## Contato
 
